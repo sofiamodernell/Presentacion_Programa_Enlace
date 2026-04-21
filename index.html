@@ -7,1262 +7,999 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
-    --utec-blue:     #003B71;
-    --utec-sky:      #0077C8;
-    --utec-accent:   #E8A020;
-    --utec-light:    #EEF4FA;
-    --utec-white:    #FFFFFF;
-    --utec-gray:     #F5F7FA;
-    --utec-text:     #1A2A3A;
-    --utec-muted:    #6B7E92;
-    --utec-green:    #2E8B57;
-    --utec-red:      #C0392B;
-    --radius:        16px;
-    --shadow:        0 8px 40px rgba(0,59,113,.12);
-    --shadow-sm:     0 2px 12px rgba(0,59,113,.08);
+    --utec-blue:   #003B71;
+    --utec-sky:    #0077C8;
+    --utec-accent: #E8A020;
+    --utec-white:  #FFFFFF;
+    --utec-gray:   #F5F7FA;
+    --utec-text:   #1A2A3A;
+    --utec-muted:  #6B7E92;
+    --utec-green:  #2E8B57;
+    --utec-red:    #C0392B;
+    --radius:      16px;
+    --shadow:      0 8px 40px rgba(0,59,113,.12);
+    --shadow-sm:   0 2px 12px rgba(0,59,113,.08);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: 'DM Sans', sans-serif;
     background: #0e1a27;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    padding: 0;
     overflow: hidden;
+    height: 100vh;
   }
 
-  /* ── Navigation bar ── */
+  /* ─── Navigation ─── */
   .nav {
-    position: fixed;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(255,255,255,.12);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,.2);
-    border-radius: 50px;
-    padding: 10px 20px;
-    box-shadow: 0 8px 32px rgba(0,0,0,.3);
+    position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,.12); backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,.2); border-radius: 50px;
+    padding: 9px 18px; box-shadow: 0 8px 32px rgba(0,0,0,.3);
   }
   .nav button {
-    background: none;
-    border: none;
-    color: #fff;
-    font-family: 'Outfit', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 6px 14px;
-    border-radius: 30px;
-    transition: background .2s, color .2s;
-    letter-spacing: .03em;
+    background: none; border: none; color: #fff;
+    font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600;
+    cursor: pointer; padding: 6px 12px; border-radius: 30px;
+    transition: background .2s;
   }
   .nav button:hover { background: rgba(255,255,255,.15); }
-  .nav button.active { background: var(--utec-accent); color: #fff; }
-  .nav-dots {
-    display: flex;
-    gap: 6px;
-  }
+  .nav-dots { display: flex; gap: 5px; }
   .nav-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: rgba(255,255,255,.3);
-    cursor: pointer;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(255,255,255,.3); cursor: pointer;
     transition: background .2s, transform .2s;
   }
   .nav-dot.active { background: var(--utec-accent); transform: scale(1.3); }
   .slide-counter {
-    color: rgba(255,255,255,.5);
-    font-family: 'Outfit', sans-serif;
-    font-size: 12px;
-    font-weight: 500;
-    min-width: 40px;
-    text-align: center;
+    color: rgba(255,255,255,.45); font-family: 'Outfit', sans-serif;
+    font-size: 11px; min-width: 36px; text-align: center;
   }
 
-  /* ── Slide stage ── */
-  .stage {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-  }
-
+  /* ─── Stage ─── */
+  .stage { width: 100vw; height: 100vh; position: relative; }
   .slide {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(60px);
-    transition: opacity .5s cubic-bezier(.4,0,.2,1),
-                transform .5s cubic-bezier(.4,0,.2,1);
+    position: absolute; inset: 0;
+    opacity: 0; pointer-events: none; transform: translateX(50px);
+    transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1);
     display: flex;
-    align-items: stretch;
-    justify-content: stretch;
   }
-  .slide.active {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateX(0);
-  }
-  .slide.prev {
-    opacity: 0;
-    transform: translateX(-60px);
+  .slide.active  { opacity: 1; pointer-events: all; transform: translateX(0); }
+  .slide.prev    { opacity: 0; transform: translateX(-50px); }
+
+  /* ─── Shared inner ─── */
+  .si {
+    flex: 1; display: flex; flex-direction: column;
+    padding: 40px 68px 86px; position: relative; overflow: hidden;
   }
 
-  /* ── Shared layout ── */
-  .slide-inner {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 56px 72px 100px;
-    position: relative;
-    overflow: hidden;
-  }
+  /* shared components */
   .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(232,160,32,.18);
-    color: var(--utec-accent);
-    border: 1px solid rgba(232,160,32,.35);
-    border-radius: 30px;
-    padding: 5px 14px;
-    font-family: 'Outfit', sans-serif;
-    font-size: 11.5px;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    width: fit-content;
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(232,160,32,.18); color: var(--utec-accent);
+    border: 1px solid rgba(232,160,32,.35); border-radius: 30px;
+    padding: 4px 12px; font-family: 'Outfit', sans-serif; font-size: 11px;
+    font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    margin-bottom: 14px; width: fit-content;
   }
-  .slide-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: clamp(28px, 4vw, 52px);
-    font-weight: 800;
-    line-height: 1.1;
-    color: var(--utec-white);
-    margin-bottom: 10px;
+  .stitle {
+    font-family: 'Outfit', sans-serif; font-size: clamp(24px,3.5vw,44px);
+    font-weight: 800; line-height: 1.1; margin-bottom: 7px;
   }
-  .slide-title span { color: var(--utec-accent); }
-  .slide-sub {
-    font-size: 15px;
-    color: rgba(255,255,255,.55);
-    font-weight: 300;
-    margin-bottom: 36px;
-    max-width: 620px;
-    line-height: 1.6;
+  .stitle .acc { color: var(--utec-accent); }
+  .stitle .sky { color: var(--utec-sky); }
+  .ssub {
+    font-size: 14px; font-weight: 300; margin-bottom: 24px;
+    max-width: 600px; line-height: 1.6;
   }
 
-  /* ── Decorative BG shapes ── */
-  .bg-circle {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    opacity: .07;
+  /* logo row */
+  .logo-row {
+    display: flex; align-items: center; gap: 18px; margin-bottom: 30px;
+  }
+  .logo-img img {
+    height: 40px; width: auto; object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+  .logo-div { width:1px; height:32px; background: rgba(255,255,255,.2); }
+  .logo-fb  { display: none; align-items: center; gap: 8px; }
+  .logo-fb .lb {
+    width: 40px; height: 40px; border-radius: 9px; display: flex;
+    align-items: center; justify-content: center;
+    font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 800; color: #fff;
+  }
+  .logo-fb .lt {
+    font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600;
+    color: rgba(255,255,255,.55); letter-spacing: .05em; text-transform: uppercase; line-height: 1.4;
   }
 
-  /* ══════════════════════════════
+  /* key hint */
+  .key-hint {
+    position: fixed; top: 16px; right: 20px; color: rgba(255,255,255,.28);
+    font-size: 11px; font-family: 'Outfit', sans-serif;
+    display: flex; align-items: center; gap: 5px; z-index: 50;
+  }
+  .key { border: 1px solid rgba(255,255,255,.2); border-radius: 4px; padding: 2px 6px; font-size: 10px; }
+
+  /* ════════════════════════════════════
      SLIDE 1 — PORTADA
-  ══════════════════════════════ */
-  #s1 { background: linear-gradient(135deg, #003B71 0%, #001d3d 100%); }
-  #s1 .slide-inner { justify-content: center; }
-  #s1 .logo-area {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 48px;
+  ════════════════════════════════════ */
+  #s1 { background: linear-gradient(135deg,#003B71 0%,#001d3d 100%); }
+  #s1 .si { justify-content: center; }
+  #s1 .bg-grid {
+    position: absolute; right:-80px; top:-80px; width:580px; height:580px;
+    opacity: .04; pointer-events: none;
+    background-image:
+      repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 60px),
+      repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 60px);
   }
-  #s1 .logo-box {
-    width: 52px; height: 52px;
-    background: var(--utec-accent);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Outfit', sans-serif;
-    font-size: 18px;
-    font-weight: 800;
-    color: #fff;
-    letter-spacing: -.5px;
+  #s1 .accent-line {
+    position: absolute; bottom:0; left:0; right:0; height:4px;
+    background: linear-gradient(90deg,var(--utec-accent),var(--utec-sky),transparent);
   }
-  #s1 .logo-text {
-    font-family: 'Outfit', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: rgba(255,255,255,.6);
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    line-height: 1.4;
+  #s1 .tag {
+    font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: .15em; text-transform: uppercase; color: var(--utec-accent);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
   }
-  #s1 .hero-tag {
-    font-family: 'Outfit', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: var(--utec-accent);
-    margin-bottom: 18px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  #s1 .hero-tag::before {
-    content: '';
-    display: inline-block;
-    width: 30px; height: 2px;
-    background: var(--utec-accent);
-  }
+  #s1 .tag::before { content:''; display:inline-block; width:28px; height:2px; background:var(--utec-accent); }
   #s1 h1 {
     font-family: 'Outfit', sans-serif;
-    font-size: clamp(36px, 5.5vw, 68px);
-    font-weight: 800;
-    color: #fff;
-    line-height: 1.05;
-    margin-bottom: 20px;
-    max-width: 780px;
+    font-size: clamp(32px,4.8vw,60px); font-weight: 800;
+    color: #fff; line-height: 1.05; margin-bottom: 16px; max-width: 760px;
   }
   #s1 h1 span { color: var(--utec-accent); }
   #s1 .tagline {
-    font-size: 17px;
-    color: rgba(255,255,255,.55);
-    font-style: italic;
-    font-weight: 300;
-    margin-bottom: 48px;
-    max-width: 520px;
-    line-height: 1.6;
+    font-size: 15px; color: rgba(255,255,255,.48); font-style: italic;
+    font-weight: 300; margin-bottom: 32px; max-width: 500px; line-height: 1.6;
   }
-  #s1 .pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+  #s1 .pills { display: flex; flex-wrap: wrap; gap: 9px; }
   #s1 .pill {
-    background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.15);
-    color: rgba(255,255,255,.75);
-    border-radius: 30px;
-    padding: 7px 16px;
-    font-size: 13px;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 500;
-  }
-  #s1 .bg-circuit {
-    position: absolute;
-    right: -80px; top: -80px;
-    width: 600px; height: 600px;
-    opacity: .04;
-    background-image:
-      repeating-linear-gradient(0deg, #fff 0, #fff 1px, transparent 1px, transparent 60px),
-      repeating-linear-gradient(90deg, #fff 0, #fff 1px, transparent 1px, transparent 60px);
-  }
-  #s1 .accent-line {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--utec-accent), var(--utec-sky), transparent);
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+    color: rgba(255,255,255,.72); border-radius: 30px; padding: 6px 14px;
+    font-size: 12.5px; font-family: 'Outfit', sans-serif; font-weight: 500;
   }
 
-  /* ══════════════════════════════
-     SLIDE 2 — ¿QUÉ ES LA TUTORÍA?
-  ══════════════════════════════ */
+  /* ════════════════════════════════════
+     SLIDE 2 — ¿QUÉ ES?
+  ════════════════════════════════════ */
   #s2 { background: #f5f7fa; }
-  #s2 .slide-inner { justify-content: flex-start; }
-  #s2 .slide-title { color: var(--utec-blue); }
-  #s2 .definition-card {
-    background: var(--utec-blue);
-    color: #fff;
-    border-radius: var(--radius);
-    padding: 28px 32px;
-    margin-bottom: 28px;
-    max-width: 780px;
-    position: relative;
-    overflow: hidden;
+  #s2 .stitle, #s2 .ssub { color: var(--utec-blue) !important; }
+  #s2 .ssub { color: var(--utec-muted) !important; }
+  #s2 .defcard {
+    background: var(--utec-blue); color: rgba(255,255,255,.9);
+    border-radius: var(--radius); padding: 22px 26px; margin-bottom: 18px;
+    max-width: 780px; position: relative; overflow: hidden; font-size: 14.5px; line-height: 1.7;
   }
-  #s2 .definition-card::before {
-    content: '"';
-    position: absolute;
-    top: -10px; left: 18px;
-    font-size: 100px;
-    font-family: Georgia, serif;
-    color: rgba(255,255,255,.08);
-    line-height: 1;
+  #s2 .defcard::before {
+    content:'"'; position:absolute; top:-8px; left:14px;
+    font-size:88px; font-family:Georgia,serif; color:rgba(255,255,255,.06); line-height:1;
   }
-  #s2 .definition-card p {
-    font-size: 15.5px;
-    line-height: 1.7;
-    font-weight: 400;
-    position: relative;
-    color: rgba(255,255,255,.9);
-  }
-  #s2 .definition-card strong {
-    color: var(--utec-accent);
-  }
-  #s2 .analogy-box {
-    background: #fff;
-    border-left: 4px solid var(--utec-accent);
+  #s2 .defcard strong { color: var(--utec-accent); }
+  #s2 .analogy {
+    background:#fff; border-left:4px solid var(--utec-accent);
     border-radius: 0 var(--radius) var(--radius) 0;
-    padding: 18px 24px;
-    max-width: 700px;
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 28px;
+    padding: 14px 20px; max-width:700px; box-shadow:var(--shadow-sm); margin-bottom:20px;
   }
-  #s2 .analogy-box .label {
-    font-size: 10px;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 700;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--utec-accent);
-    margin-bottom: 6px;
+  #s2 .analogy .alabel {
+    font-size:10px; font-family:'Outfit',sans-serif; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--utec-accent); margin-bottom:4px;
   }
-  #s2 .analogy-box p {
-    font-size: 14px;
-    color: var(--utec-text);
-    line-height: 1.65;
-  }
-  #s2 .keywords {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+  #s2 .analogy p { font-size:13.5px; color:var(--utec-text); line-height:1.65; }
+  #s2 .kws { display:flex; flex-wrap:wrap; gap:8px; }
   #s2 .kw {
-    background: var(--utec-blue);
-    color: #fff;
-    border-radius: 30px;
-    padding: 7px 18px;
-    font-family: 'Outfit', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
+    background:var(--utec-blue); color:#fff; border-radius:30px;
+    padding:6px 16px; font-family:'Outfit',sans-serif; font-size:12.5px; font-weight:600;
   }
 
-  /* ══════════════════════════════
+  /* ════════════════════════════════════
      SLIDE 3 — JERARQUÍA
-  ══════════════════════════════ */
-  #s3 { background: linear-gradient(160deg, #001d3d 0%, #003B71 100%); }
-  #s3 .slide-title { color: #fff; }
-  #s3 .slide-sub { color: rgba(255,255,255,.5); }
-  #s3 .hierarchy {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    max-width: 640px;
+  ════════════════════════════════════ */
+  #s3 { background: linear-gradient(160deg,#001d3d 0%,#003B71 100%); }
+  #s3 .stitle { color:#fff; }
+  #s3 .ssub   { color:rgba(255,255,255,.5); }
+  #s3 .hier   { display:flex; flex-direction:column; gap:0; max-width:640px; }
+  #s3 .hitem  {
+    display:flex; align-items:center; gap:16px; padding:13px 20px;
+    border-radius:var(--radius); border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.05);
   }
-  #s3 .h-item {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding: 16px 24px;
-    border-radius: var(--radius);
-    border: 1px solid rgba(255,255,255,.1);
-    background: rgba(255,255,255,.05);
-    transition: background .2s;
-    position: relative;
+  #s3 .hitem.hi { background:rgba(232,160,32,.14); border-color:rgba(232,160,32,.38); }
+  #s3 .hnum {
+    width:30px; height:30px; background:var(--utec-sky); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Outfit',sans-serif; font-size:12px; font-weight:800; color:#fff; flex-shrink:0;
   }
-  #s3 .h-item.highlight {
-    background: rgba(232,160,32,.15);
-    border-color: rgba(232,160,32,.4);
+  #s3 .hitem.hi .hnum { background:var(--utec-accent); }
+  #s3 .hname { font-family:'Outfit',sans-serif; font-size:14.5px; font-weight:700; color:#fff; flex:1; }
+  #s3 .hdesc { font-size:12px; color:rgba(255,255,255,.48); }
+  #s3 .hbadge {
+    background:var(--utec-accent); color:#fff; font-family:'Outfit',sans-serif;
+    font-size:9.5px; font-weight:700; padding:3px 9px; border-radius:20px;
+    letter-spacing:.05em; text-transform:uppercase;
   }
-  #s3 .h-num {
-    width: 34px; height: 34px;
-    background: var(--utec-sky);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Outfit', sans-serif;
-    font-size: 13px;
-    font-weight: 800;
-    color: #fff;
-    flex-shrink: 0;
+  #s3 .conn  { width:2px; height:9px; background:rgba(255,255,255,.14); margin-left:35px; }
+
+  /* ════════════════════════════════════
+     SLIDE 4 — NO UC
+  ════════════════════════════════════ */
+  #s4 { background:#f5f7fa; }
+  #s4 .stitle { color:var(--utec-blue); }
+  #s4 .ssub   { color:var(--utec-muted); }
+  #s4 .cgrid  { display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:820px; }
+  #s4 .ccard  {
+    background:#fff; border-radius:var(--radius); padding:22px; box-shadow:var(--shadow-sm);
+    border-top:5px solid transparent;
   }
-  #s3 .h-item.highlight .h-num { background: var(--utec-accent); }
-  #s3 .h-name {
-    font-family: 'Outfit', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    flex: 1;
+  #s4 .ccard.no  { border-top-color:var(--utec-red); }
+  #s4 .ccard.yes { border-top-color:var(--utec-green); }
+  #s4 .ccard .clabel {
+    font-family:'Outfit',sans-serif; font-size:11px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; margin-bottom:10px;
   }
-  #s3 .h-desc {
-    font-size: 13px;
-    color: rgba(255,255,255,.5);
-    font-weight: 300;
+  #s4 .ccard.no  .clabel { color:var(--utec-red); }
+  #s4 .ccard.yes .clabel { color:var(--utec-green); }
+  #s4 .ccard h3 {
+    font-family:'Outfit',sans-serif; font-size:16px; font-weight:700;
+    color:var(--utec-text); margin-bottom:8px; line-height:1.3;
   }
-  #s3 .h-badge {
-    background: var(--utec-accent);
-    color: #fff;
-    font-family: 'Outfit', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 20px;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-  }
-  #s3 .connector {
-    width: 2px; height: 10px;
-    background: rgba(255,255,255,.15);
-    margin-left: 40px;
-    margin-top: -8px;
-    margin-bottom: -8px;
+  #s4 .ccard p { font-size:13px; color:var(--utec-muted); line-height:1.65; }
+  #s4 .ccard p strong { color:var(--utec-text); }
+  #s4 .alertbar {
+    background:var(--utec-blue); color:#fff; border-radius:var(--radius);
+    padding:12px 18px; font-size:13px; margin-top:14px; max-width:820px;
+    display:flex; align-items:center; gap:10px; line-height:1.5;
   }
 
-  /* ══════════════════════════════
-     SLIDE 4 — NO ES TUTORÍA DE UC
-  ══════════════════════════════ */
-  #s4 { background: #f5f7fa; }
-  #s4 .slide-title { color: var(--utec-blue); }
-  #s4 .compare-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    max-width: 820px;
+  /* ════════════════════════════════════
+     SLIDE 5 — ROL
+  ════════════════════════════════════ */
+  #s5 { background:linear-gradient(160deg,#001d3d 0%,#003B71 100%); }
+  #s5 .stitle { color:#fff; }
+  #s5 .ssub   { color:rgba(255,255,255,.5); }
+  #s5 .rgrid  { display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:800px; }
+  #s5 .rcard  {
+    border-radius:var(--radius); padding:18px 20px;
+    border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.05);
   }
-  #s4 .compare-card {
-    background: #fff;
-    border-radius: var(--radius);
-    padding: 28px;
-    box-shadow: var(--shadow-sm);
-    border-top: 5px solid transparent;
+  #s5 .rcard.yes { border-color:rgba(46,139,87,.4);  background:rgba(46,139,87,.1); }
+  #s5 .rcard.no  { border-color:rgba(192,57,43,.3);   background:rgba(192,57,43,.08); }
+  #s5 .rtitle {
+    font-family:'Outfit',sans-serif; font-size:11px; font-weight:700;
+    letter-spacing:.08em; text-transform:uppercase; margin-bottom:9px;
   }
-  #s4 .compare-card.no { border-top-color: var(--utec-red); }
-  #s4 .compare-card.yes { border-top-color: var(--utec-green); }
-  #s4 .compare-card .c-label {
-    font-family: 'Outfit', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    margin-bottom: 14px;
+  #s5 .rcard.yes .rtitle { color:#6ee09e; }
+  #s5 .rcard.no  .rtitle { color:#f08080; }
+  #s5 .ri {
+    display:flex; align-items:flex-start; gap:8px; margin-bottom:7px;
+    font-size:12.5px; color:rgba(255,255,255,.78); line-height:1.5;
   }
-  #s4 .compare-card.no .c-label { color: var(--utec-red); }
-  #s4 .compare-card.yes .c-label { color: var(--utec-green); }
-  #s4 .compare-card h3 {
-    font-family: 'Outfit', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--utec-text);
-    margin-bottom: 10px;
-    line-height: 1.3;
+  #s5 .ri .dot { width:6px; height:6px; border-radius:50%; margin-top:5px; flex-shrink:0; }
+  #s5 .rcard.yes .dot { background:#6ee09e; }
+  #s5 .rcard.no  .dot { background:#f08080; }
+  #s5 .conf {
+    margin-top:14px; background:rgba(232,160,32,.14);
+    border:1px solid rgba(232,160,32,.32); border-radius:var(--radius);
+    padding:12px 16px; max-width:800px; font-size:13px;
+    color:rgba(255,255,255,.82); display:flex; align-items:center; gap:10px; line-height:1.5;
   }
-  #s4 .compare-card p {
-    font-size: 13.5px;
-    color: var(--utec-muted);
-    line-height: 1.65;
-  }
-  #s4 .compare-card p strong { color: var(--utec-text); }
-  #s4 .alert-bar {
-    background: var(--utec-blue);
-    color: #fff;
-    border-radius: var(--radius);
-    padding: 14px 22px;
-    font-size: 13.5px;
-    margin-top: 18px;
-    max-width: 820px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    line-height: 1.5;
-  }
-  #s4 .alert-bar .icon { font-size: 20px; flex-shrink: 0; }
 
-  /* ══════════════════════════════
-     SLIDE 5 — ROL DEL TUTOR
-  ══════════════════════════════ */
-  #s5 { background: linear-gradient(160deg, #001d3d 0%, #003B71 100%); }
-  #s5 .slide-title { color: #fff; }
-  #s5 .role-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    max-width: 800px;
-  }
-  #s5 .role-card {
-    border-radius: var(--radius);
-    padding: 22px 24px;
-    border: 1px solid rgba(255,255,255,.1);
-    background: rgba(255,255,255,.05);
-  }
-  #s5 .role-card.yes-card { border-color: rgba(46,139,87,.4); background: rgba(46,139,87,.1); }
-  #s5 .role-card.no-card  { border-color: rgba(192,57,43,.3);  background: rgba(192,57,43,.08); }
-  #s5 .role-card .rc-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  #s5 .role-card.yes-card .rc-title { color: #6ee09e; }
-  #s5 .role-card.no-card  .rc-title { color: #f08080; }
-  #s5 .role-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 9px;
-    font-size: 13.5px;
-    color: rgba(255,255,255,.8);
-    line-height: 1.5;
-  }
-  #s5 .role-item .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    margin-top: 6px;
-    flex-shrink: 0;
-  }
-  #s5 .role-card.yes-card .dot { background: #6ee09e; }
-  #s5 .role-card.no-card  .dot { background: #f08080; }
-  #s5 .confidentiality {
-    margin-top: 18px;
-    background: rgba(232,160,32,.15);
-    border: 1px solid rgba(232,160,32,.35);
-    border-radius: var(--radius);
-    padding: 14px 20px;
-    max-width: 800px;
-    font-size: 14px;
-    color: rgba(255,255,255,.85);
-    display: flex; align-items: center; gap: 12px;
-    line-height: 1.5;
-  }
-  #s5 .confidentiality .icon { font-size: 20px; flex-shrink: 0; }
-
-  /* ══════════════════════════════
+  /* ════════════════════════════════════
      SLIDE 6 — TOOLBOX
-  ══════════════════════════════ */
-  #s6 { background: #f5f7fa; }
-  #s6 .slide-title { color: var(--utec-blue); }
-  #s6 .tools-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    max-width: 860px;
+  ════════════════════════════════════ */
+  #s6 { background:#f5f7fa; }
+  #s6 .stitle { color:var(--utec-blue); }
+  #s6 .ssub   { color:var(--utec-muted); }
+  #s6 .tgrid  { display:grid; grid-template-columns:repeat(4,1fr); gap:13px; max-width:860px; }
+  #s6 .tcard  {
+    background:#fff; border-radius:var(--radius); padding:18px 14px;
+    box-shadow:var(--shadow-sm); text-align:center; transition:transform .2s,box-shadow .2s;
   }
-  #s6 .tool-card {
-    background: #fff;
-    border-radius: var(--radius);
-    padding: 22px 18px;
-    box-shadow: var(--shadow-sm);
-    text-align: center;
-    transition: transform .2s, box-shadow .2s;
+  #s6 .tcard:hover { transform:translateY(-4px); box-shadow:var(--shadow); }
+  #s6 .ticon { font-size:26px; margin-bottom:7px; }
+  #s6 .tname { font-family:'Outfit',sans-serif; font-size:13px; font-weight:700; color:var(--utec-blue); margin-bottom:5px; }
+  #s6 .tdesc { font-size:11.5px; color:var(--utec-muted); line-height:1.55; }
+
+  /* ════════════════════════════════════
+     SLIDE 7 — CRONOGRAMA + HORARIOS
+  ════════════════════════════════════ */
+  #s7 { background:linear-gradient(160deg,#001d3d 0%,#003B71 100%); }
+  #s7 .stitle { color:#fff; }
+  #s7 .sgrid  { display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:820px; }
+  #s7 .sblock {
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+    border-radius:var(--radius); padding:18px 20px;
   }
-  #s6 .tool-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-  #s6 .tool-icon {
-    font-size: 30px;
-    margin-bottom: 10px;
+  #s7 .sblock.hi { border-color:rgba(232,160,32,.4); background:rgba(232,160,32,.09); }
+  #s7 .slabel { font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--utec-accent); margin-bottom:5px; }
+  #s7 .stit2  { font-family:'Outfit',sans-serif; font-size:17px; font-weight:700; color:#fff; margin-bottom:3px; }
+  #s7 .sfreq  { font-size:13px; color:var(--utec-accent); font-weight:600; font-family:'Outfit',sans-serif; margin-bottom:6px; }
+  #s7 .snote  { font-size:12px; color:rgba(255,255,255,.48); line-height:1.6; }
+  #s7 .avail-title {
+    font-family:'Outfit',sans-serif; font-size:13px; font-weight:700;
+    color:rgba(255,255,255,.78); margin:14px 0 9px;
   }
-  #s6 .tool-name {
-    font-family: 'Outfit', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--utec-blue);
-    margin-bottom: 6px;
+  #s7 .dgrid  { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; max-width:820px; }
+  #s7 .dcard  {
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+    border-radius:9px; padding:9px 6px; text-align:center;
   }
-  #s6 .tool-desc {
-    font-size: 12px;
-    color: var(--utec-muted);
-    line-height: 1.55;
+  #s7 .dcard.ok   { border-color:rgba(46,139,87,.5);   background:rgba(46,139,87,.1); }
+  #s7 .dcard.busy { border-color:rgba(232,160,32,.4);   background:rgba(232,160,32,.07); }
+  #s7 .dname { font-family:'Outfit',sans-serif; font-size:11.5px; font-weight:700; color:#fff; margin-bottom:3px; }
+  #s7 .dstatus { font-size:10.5px; color:rgba(255,255,255,.45); line-height:1.4; }
+  #s7 .dcard.ok   .dstatus { color:#6ee09e; }
+  #s7 .dcard.busy .dstatus { color:var(--utec-accent); }
+  #s7 .avnote {
+    margin-top:9px; background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.09); border-radius:9px;
+    padding:9px 14px; font-size:11.5px; color:rgba(255,255,255,.48);
+    max-width:820px; display:flex; align-items:center; gap:7px; line-height:1.5;
+  }
+  #s7 .avnote strong { color:rgba(255,255,255,.75); }
+
+  /* ════════════════════════════════════
+     SLIDE 8 — MANUAL DE SUPERVIVENCIA
+  ════════════════════════════════════ */
+  #s8 { background:#f5f7fa; }
+  #s8 .stitle { color:var(--utec-blue); }
+  #s8 .ssub   { color:var(--utec-muted); }
+  #s8 .mgrid  { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:860px; }
+  #s8 .mcard  {
+    background:#fff; border-radius:var(--radius); padding:18px 16px;
+    box-shadow:var(--shadow-sm); border-top:4px solid var(--utec-sky);
+    transition:transform .18s;
+  }
+  #s8 .mcard:hover { transform:translateY(-3px); }
+  #s8 .mcard:nth-child(2) { border-top-color:var(--utec-accent); }
+  #s8 .mcard:nth-child(3) { border-top-color:var(--utec-green); }
+  #s8 .mcard:nth-child(4) { border-top-color:#9b59b6; }
+  #s8 .mcard:nth-child(5) { border-top-color:#e74c3c; }
+  #s8 .mcard:nth-child(6) { border-top-color:#1abc9c; }
+  #s8 .micon { font-size:22px; margin-bottom:7px; }
+  #s8 .mname { font-family:'Outfit',sans-serif; font-size:13px; font-weight:700; color:var(--utec-blue); margin-bottom:5px; }
+  #s8 .mtip  { font-size:11.5px; color:var(--utec-muted); line-height:1.6; }
+  #s8 .mtip strong { color:var(--utec-text); }
+  #s8 .mfooter {
+    margin-top:12px; background:var(--utec-blue); border-radius:var(--radius);
+    padding:11px 18px; max-width:860px; font-size:12.5px;
+    color:rgba(255,255,255,.78); display:flex; align-items:center; gap:9px; line-height:1.5;
   }
 
-  /* ══════════════════════════════
-     SLIDE 7 — CRONOGRAMA
-  ══════════════════════════════ */
-  #s7 { background: linear-gradient(160deg, #001d3d 0%, #003B71 100%); }
-  #s7 .slide-title { color: #fff; }
-  #s7 .timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    max-width: 700px;
+  /* ════════════════════════════════════
+     SLIDE 9 — CALENDARIO / RECURSOS / BECAS
+  ════════════════════════════════════ */
+  #s9 { background:linear-gradient(160deg,#001d3d 0%,#003B71 100%); }
+  #s9 .stitle { color:#fff; }
+  #s9 .ssub   { color:rgba(255,255,255,.5); }
+  #s9 .calgrid { display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:820px; }
+  #s9 .chead  {
+    font-family:'Outfit',sans-serif; font-size:10px; font-weight:700;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--utec-accent);
+    margin-bottom:9px; display:flex; align-items:center; gap:5px;
   }
-  #s7 .tl-item {
-    display: flex;
-    gap: 24px;
-    align-items: flex-start;
+  #s9 .citem  {
+    display:flex; align-items:flex-start; gap:10px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+    border-radius:9px; padding:10px 12px; margin-bottom:7px;
   }
-  #s7 .tl-left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    flex-shrink: 0;
-    width: 40px;
+  #s9 .citem.urg { border-color:rgba(232,160,32,.5); background:rgba(232,160,32,.1); }
+  #s9 .cdate {
+    font-family:'Outfit',sans-serif; font-size:10.5px; font-weight:700;
+    color:var(--utec-accent); min-width:52px; text-align:center;
+    background:rgba(232,160,32,.14); border-radius:6px; padding:3px 5px; line-height:1.3;
   }
-  #s7 .tl-dot {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    background: var(--utec-sky);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Outfit', sans-serif;
-    font-size: 14px;
-    font-weight: 800;
-    color: #fff;
-    flex-shrink: 0;
+  #s9 .citem.urg .cdate { background:var(--utec-accent); color:#fff; }
+  #s9 .cinfo strong { font-size:12.5px; color:#fff; display:block; margin-bottom:2px; }
+  #s9 .cinfo span   { font-size:11.5px; color:rgba(255,255,255,.48); }
+  #s9 .resrow { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  #s9 .rlink  {
+    display:inline-flex; align-items:center; gap:5px;
+    background:rgba(0,119,200,.2); border:1px solid rgba(0,119,200,.4);
+    color:#7ec8f5; border-radius:7px; padding:5px 10px;
+    font-size:11.5px; font-family:'Outfit',sans-serif; font-weight:600;
+    text-decoration:none; transition:background .2s;
   }
-  #s7 .tl-item:first-child .tl-dot { background: var(--utec-accent); }
-  #s7 .tl-line {
-    width: 2px;
-    background: rgba(255,255,255,.15);
-    flex: 1;
-    min-height: 24px;
+  #s9 .rlink:hover { background:rgba(0,119,200,.35); }
+  #s9 .becabar {
+    background:rgba(46,139,87,.14); border:1px solid rgba(46,139,87,.38);
+    border-radius:var(--radius); padding:11px 16px; margin-top:10px;
+    max-width:820px; font-size:12.5px; color:rgba(255,255,255,.78);
+    display:flex; align-items:center; gap:9px; line-height:1.5;
   }
-  #s7 .tl-content {
-    padding-bottom: 28px;
-    flex: 1;
-  }
-  #s7 .tl-semester {
-    font-family: 'Outfit', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 4px;
-  }
-  #s7 .tl-freq {
-    font-size: 14px;
-    color: var(--utec-accent);
-    font-weight: 600;
-    font-family: 'Outfit', sans-serif;
-    margin-bottom: 6px;
-  }
-  #s7 .tl-note {
-    font-size: 13px;
-    color: rgba(255,255,255,.5);
-    line-height: 1.6;
-  }
-  #s7 .modality-bar {
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: var(--radius);
-    padding: 18px 22px;
-    max-width: 700px;
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    font-size: 14px;
-    color: rgba(255,255,255,.8);
-    line-height: 1.6;
-  }
-  #s7 .modality-bar .icon { font-size: 22px; flex-shrink: 0; }
+  #s9 .becabar strong { color:#6ee09e; }
 
-  /* ══════════════════════════════
-     SLIDE 8 — SISTEMA MECATRÓNICO
-  ══════════════════════════════ */
-  #s8 { background: #f5f7fa; }
-  #s8 .slide-title { color: var(--utec-blue); }
-  #s8 .system-flow {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    max-width: 820px;
-    margin-bottom: 28px;
+  /* ════════════════════════════════════
+     SLIDE 10 — SISTEMA MECATRÓNICO
+  ════════════════════════════════════ */
+  #s10 { background:#f5f7fa; }
+  #s10 .stitle { color:var(--utec-blue); }
+  #s10 .ssub   { color:var(--utec-muted); }
+  #s10 .sflow  { display:flex; align-items:center; max-width:820px; margin-bottom:20px; }
+  #s10 .syb    {
+    flex:1; border-radius:var(--radius); padding:18px 12px;
+    text-align:center; box-shadow:var(--shadow-sm);
   }
-  #s8 .sys-block {
-    flex: 1;
-    background: #fff;
-    border-radius: var(--radius);
-    padding: 22px 18px;
-    text-align: center;
-    box-shadow: var(--shadow-sm);
-    position: relative;
+  #s10 .syb.w  { background:#fff; }
+  #s10 .syb.bl { background:var(--utec-blue); }
+  #s10 .sarr   { width:30px; display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+  #s10 .aline  { height:2px; width:100%; background:var(--utec-sky); }
+  #s10 .ahead  { font-size:15px; color:var(--utec-sky); margin-top:-8px; }
+  #s10 .sico   { font-size:24px; margin-bottom:6px; }
+  #s10 .snm    {
+    font-family:'Outfit',sans-serif; font-size:10.5px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; margin-bottom:3px;
   }
-  #s8 .sys-block:nth-child(2) {
-    background: var(--utec-blue);
-  }
-  #s8 .sys-arrow {
-    width: 36px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    flex-shrink: 0;
-  }
-  #s8 .arrow-line {
-    height: 2px;
-    width: 100%;
-    background: var(--utec-sky);
-  }
-  #s8 .arrow-head {
-    font-size: 18px;
-    color: var(--utec-sky);
-    margin-top: -8px;
-  }
-  #s8 .sys-icon { font-size: 28px; margin-bottom: 8px; }
-  #s8 .sys-name {
-    font-family: 'Outfit', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    color: var(--utec-sky);
-    margin-bottom: 6px;
-  }
-  #s8 .sys-block:nth-child(3) .sys-name { color: var(--utec-accent); }
-  #s8 .sys-block:nth-child(5) .sys-name { color: #6ee09e; }
-  #s8 .sys-block:nth-child(3) { background: var(--utec-blue); }
-  #s8 .sys-block:nth-child(5) { background: var(--utec-blue); }
-  #s8 .sys-label {
-    font-family: 'Outfit', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 4px;
-  }
-  #s8 .sys-block:nth-child(1) .sys-label,
-  #s8 .sys-block:nth-child(7) .sys-label { color: var(--utec-text); }
-  #s8 .sys-desc {
-    font-size: 12px;
-    color: rgba(255,255,255,.6);
-    line-height: 1.5;
-  }
-  #s8 .sys-block:nth-child(1) .sys-desc,
-  #s8 .sys-block:nth-child(7) .sys-desc { color: var(--utec-muted); }
-  #s8 .feedback-loop {
-    background: var(--utec-blue);
-    color: rgba(255,255,255,.8);
-    border-radius: var(--radius);
-    padding: 14px 22px;
-    max-width: 820px;
-    font-size: 13.5px;
-    display: flex; align-items: center; gap: 12px;
-    line-height: 1.5;
-  }
-  #s8 .feedback-loop .icon { font-size: 20px; flex-shrink: 0; }
-
-  /* ══════════════════════════════
-     SLIDE 9 — YO TAMBIÉN ESTUVE AHÍ
-  ══════════════════════════════ */
-  #s9 { background: linear-gradient(160deg, #001d3d 0%, #003B71 100%); }
-  #s9 .slide-title { color: #fff; }
-  #s9 .empathy-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 16px;
-    max-width: 820px;
-  }
-  #s9 .em-card {
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: var(--radius);
-    padding: 22px 20px;
-  }
-  #s9 .em-card .em-icon { font-size: 26px; margin-bottom: 10px; }
-  #s9 .em-card .em-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--utec-accent);
-    margin-bottom: 8px;
-  }
-  #s9 .em-card p {
-    font-size: 13px;
-    color: rgba(255,255,255,.65);
-    line-height: 1.65;
-  }
-  #s9 .em-card p strong { color: rgba(255,255,255,.9); }
-  #s9 .share-note {
-    margin-top: 18px;
-    background: rgba(232,160,32,.12);
-    border: 1px solid rgba(232,160,32,.3);
-    border-radius: var(--radius);
-    padding: 14px 20px;
-    max-width: 820px;
-    font-size: 13.5px;
-    color: rgba(255,255,255,.8);
-    font-style: italic;
-    line-height: 1.6;
-    display: flex; align-items: center; gap: 12px;
-  }
-  #s9 .share-note .icon { font-size: 18px; flex-shrink: 0; }
-
-  /* ══════════════════════════════
-     SLIDE 10 — CIERRE
-  ══════════════════════════════ */
-  #s10 { background: var(--utec-blue); }
-  #s10 .slide-inner { justify-content: center; align-items: flex-start; }
-  #s10 .closing-q {
-    font-family: 'Outfit', sans-serif;
-    font-size: clamp(24px, 3.5vw, 46px);
-    font-weight: 800;
-    color: #fff;
-    line-height: 1.15;
-    max-width: 720px;
-    margin-bottom: 32px;
-  }
-  #s10 .closing-q span { color: var(--utec-accent); }
-  #s10 .closing-sub {
-    font-size: 15px;
-    color: rgba(255,255,255,.5);
-    margin-bottom: 40px;
-    max-width: 500px;
-    line-height: 1.65;
-  }
-  #s10 .contact-row {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  #s10 .contact-item {
-    background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.15);
-    border-radius: var(--radius);
-    padding: 14px 20px;
-    display: flex; align-items: center; gap: 10px;
-    font-size: 13.5px;
-    color: rgba(255,255,255,.8);
-  }
-  #s10 .contact-item .icon { font-size: 18px; }
-  #s10 .contact-item .label {
-    font-family: 'Outfit', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--utec-accent);
-    display: block;
-    margin-bottom: 2px;
-  }
-  #s10 .utec-footer {
-    position: absolute;
-    bottom: 48px;
-    right: 72px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  #s10 .utec-footer .f-box {
-    width: 36px; height: 36px;
-    background: var(--utec-accent);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Outfit', sans-serif;
-    font-size: 13px;
-    font-weight: 800;
-    color: #fff;
-  }
-  #s10 .utec-footer .f-text {
-    font-family: 'Outfit', sans-serif;
-    font-size: 11px;
-    color: rgba(255,255,255,.4);
-    letter-spacing: .06em;
-    text-transform: uppercase;
-  }
-  #s10 .bg-gear {
-    position: absolute;
-    right: -60px;
-    bottom: -60px;
-    font-size: 300px;
-    opacity: .03;
-    pointer-events: none;
-    line-height: 1;
+  #s10 .syb.w  .snm  { color:var(--utec-sky); }
+  #s10 .syb.bl .snm  { color:var(--utec-accent); }
+  #s10 .slab   { font-family:'Outfit',sans-serif; font-size:13.5px; font-weight:700; margin-bottom:2px; }
+  #s10 .syb.w  .slab { color:var(--utec-text); }
+  #s10 .syb.bl .slab { color:#fff; }
+  #s10 .sdesc  { font-size:11px; line-height:1.5; }
+  #s10 .syb.w  .sdesc { color:var(--utec-muted); }
+  #s10 .syb.bl .sdesc { color:rgba(255,255,255,.56); }
+  #s10 .fbloop {
+    background:var(--utec-blue); color:rgba(255,255,255,.78); border-radius:var(--radius);
+    padding:12px 18px; max-width:820px; font-size:13px;
+    display:flex; align-items:center; gap:10px; line-height:1.5;
   }
 
-  /* ── Keyboard hint ── */
-  .key-hint {
-    position: fixed;
-    top: 20px;
-    right: 24px;
-    color: rgba(255,255,255,.3);
-    font-size: 11px;
-    font-family: 'Outfit', sans-serif;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+  /* ════════════════════════════════════
+     SLIDE 11 — EMPATÍA
+  ════════════════════════════════════ */
+  #s11 { background:linear-gradient(160deg,#001d3d 0%,#003B71 100%); }
+  #s11 .stitle { color:#fff; }
+  #s11 .ssub   { color:rgba(255,255,255,.5); }
+  #s11 .egrid  { display:grid; grid-template-columns:1fr 1fr 1fr; gap:13px; max-width:820px; }
+  #s11 .ecard  {
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+    border-radius:var(--radius); padding:18px 16px;
   }
-  .key {
-    border: 1px solid rgba(255,255,255,.2);
-    border-radius: 4px;
-    padding: 2px 7px;
-    font-size: 10px;
+  #s11 .eico  { font-size:22px; margin-bottom:8px; }
+  #s11 .etit  { font-family:'Outfit',sans-serif; font-size:13px; font-weight:700; color:var(--utec-accent); margin-bottom:7px; }
+  #s11 .ecard p { font-size:12px; color:rgba(255,255,255,.62); line-height:1.65; }
+  #s11 .ecard p strong { color:rgba(255,255,255,.88); }
+  #s11 .sharenote {
+    margin-top:14px; background:rgba(232,160,32,.11);
+    border:1px solid rgba(232,160,32,.28); border-radius:var(--radius);
+    padding:12px 16px; max-width:820px; font-size:13px;
+    color:rgba(255,255,255,.78); font-style:italic; line-height:1.6;
+    display:flex; align-items:center; gap:10px;
+  }
+
+  /* ════════════════════════════════════
+     SLIDE 12 — CIERRE
+  ════════════════════════════════════ */
+  #s12 { background:var(--utec-blue); }
+  #s12 .si { justify-content:center; }
+  #s12 .bggear {
+    position:absolute; right:-50px; bottom:-50px;
+    font-size:260px; opacity:.03; pointer-events:none; line-height:1;
+  }
+  #s12 .closingq {
+    font-family:'Outfit',sans-serif;
+    font-size:clamp(20px,3vw,40px); font-weight:800;
+    color:#fff; line-height:1.15; max-width:700px; margin-bottom:20px;
+  }
+  #s12 .closingq span { color:var(--utec-accent); }
+  #s12 .closingsub { font-size:14px; color:rgba(255,255,255,.48); margin-bottom:24px; max-width:480px; line-height:1.65; }
+
+  /* Google Form button */
+  #s12 .formbtn {
+    display:inline-flex; align-items:center; gap:9px;
+    background:var(--utec-accent); color:#fff;
+    border:none; border-radius:11px;
+    padding:13px 26px; font-family:'Outfit',sans-serif;
+    font-size:13.5px; font-weight:700; cursor:pointer;
+    text-decoration:none; transition:background .2s,transform .15s;
+    margin-bottom:8px; letter-spacing:.02em;
+  }
+  #s12 .formbtn:hover { background:#c8881a; transform:translateY(-2px); }
+  #s12 .formnote { font-size:11px; color:rgba(255,255,255,.32); margin-bottom:22px; }
+
+  #s12 .crow { display:flex; gap:11px; flex-wrap:wrap; }
+  #s12 .citem {
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.13);
+    border-radius:var(--radius); padding:11px 16px;
+    display:flex; align-items:center; gap:9px;
+    font-size:12.5px; color:rgba(255,255,255,.78);
+  }
+  #s12 .citem .ico  { font-size:16px; }
+  #s12 .citem .lbl  {
+    font-family:'Outfit',sans-serif; font-size:9.5px; font-weight:700;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--utec-accent);
+    display:block; margin-bottom:2px;
+  }
+  #s12 .footer {
+    position:absolute; bottom:32px; right:68px;
+    display:flex; align-items:center; gap:9px;
+  }
+  #s12 .footer .fb  {
+    width:30px; height:30px; background:var(--utec-accent); border-radius:7px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Outfit',sans-serif; font-size:11px; font-weight:800; color:#fff;
+  }
+  #s12 .footer .ft  {
+    font-family:'Outfit',sans-serif; font-size:10.5px;
+    color:rgba(255,255,255,.3); letter-spacing:.06em; text-transform:uppercase;
   }
 </style>
 </head>
 <body>
 
 <div class="key-hint">
-  <span class="key">←</span><span class="key">→</span> o clic para navegar
+  <span class="key">←</span><span class="key">→</span> · espacio · clic
 </div>
 
 <div class="stage" id="stage">
 
-  <!-- ═══ SLIDE 1: PORTADA ═══ -->
-  <div class="slide active" id="s1">
-    <div class="slide-inner">
-      <div class="bg-circuit"></div>
-      <div class="accent-line"></div>
-      <div class="logo-area">
-        <div class="logo-box">U</div>
-        <div class="logo-text">UTEC · Universidad Tecnológica<br>Programa ENLACE</div>
+<!-- ═══ S1 · PORTADA ═══ -->
+<div class="slide active" id="s1">
+<div class="si">
+  <div class="bg-grid"></div>
+  <div class="accent-line"></div>
+  <!-- Logos: pon utec-logo.png y mecatronica-logo.png en la misma carpeta que este HTML -->
+  <div class="logo-row">
+    <div class="logo-img">
+      <img src="utec-logo.png" alt="UTEC"
+           onerror="this.parentElement.style.display='none';document.getElementById('lf1').style.display='flex'">
+    </div>
+    <div class="logo-fb" id="lf1">
+      <div class="lb" style="background:var(--utec-accent)">U</div>
+      <div class="lt">UTEC<br>Universidad Tecnológica</div>
+    </div>
+    <div class="logo-div"></div>
+    <div class="logo-img">
+      <img src="mecatronica-logo.png" alt="Mecatrónica"
+           onerror="this.parentElement.style.display='none';document.getElementById('lf2').style.display='flex'">
+    </div>
+    <div class="logo-fb" id="lf2">
+      <div class="lb" style="background:var(--utec-sky)">⚙</div>
+      <div class="lt">Ing. Mecatrónica</div>
+    </div>
+  </div>
+  <div class="tag">Tutoría Académica · Programa ENLACE 2025</div>
+  <h1>Acompañamiento<br><span>Estratégico</span><br>en Mecatrónica</h1>
+  <p class="tagline">"Porque nadie sobrevive al primer semestre operando en modo manual."</p>
+  <div class="pills">
+    <div class="pill">🎯 Ingeniería en Mecatrónica</div>
+    <div class="pill">📍 1.er Semestre · 2025</div>
+    <div class="pill">🤝 Programa ENLACE</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S2 · ¿QUÉ ES? ═══ -->
+<div class="slide" id="s2">
+<div class="si">
+  <div class="chip">📖 Definición</div>
+  <h2 class="stitle">¿Qué es la <span class="sky">Tutoría Académica</span>?</h2>
+  <p class="ssub" style="color:var(--utec-muted)">No es una clase extra. Es algo mucho más valioso.</p>
+  <div class="defcard">
+    <p>Es un proceso de <strong>acompañamiento personalizado</strong> que busca potenciar tus habilidades, anticipar obstáculos y orientarte a lo largo de tu trayectoria universitaria.<br><br>
+    Orientamos, acompañamos, <strong>escuchamos</strong> y empatizamos. Somos guía académica y logística.</p>
+  </div>
+  <div class="analogy">
+    <div class="alabel">🔧 Analogía mecatrónica</div>
+    <p>Así como un <strong>sistema de control de lazo cerrado</strong> ajusta su salida con base en la retroalimentación, la tutoría es el <em>feedback</em> que te ayuda a <strong>recalibrar tu camino académico</strong> antes de que la señal de error sea demasiado grande.</p>
+  </div>
+  <div class="kws">
+    <div class="kw">Orientar</div><div class="kw">Acompañar</div>
+    <div class="kw">Escuchar</div><div class="kw">Empatizar</div>
+    <div class="kw">Guía Académica</div><div class="kw">Guía Logística</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S3 · JERARQUÍA ═══ -->
+<div class="slide" id="s3">
+<div class="si">
+  <div class="chip">🗂️ Estructura</div>
+  <h2 class="stitle" style="color:#fff">Tu red de <span class="acc">soporte</span></h2>
+  <p class="ssub" style="color:rgba(255,255,255,.5)">Nunca estás solo/a. Hay toda una estructura detrás tuyo.</p>
+  <div class="hier">
+    <div class="hitem hi"><div class="hnum">1</div><div style="flex:1"><div class="hname">👤 Estudiante</div><div class="hdesc">El centro del sistema. El protagonista.</div></div><div class="hbadge">Tú</div></div>
+    <div class="conn"></div>
+    <div class="hitem hi"><div class="hnum">2</div><div style="flex:1"><div class="hname">🙋 Tutor/a</div><div class="hdesc">Tu primer punto de contacto y aliado/a. Primer filtro de consultas y apoyo.</div></div><div class="hbadge">Yo</div></div>
+    <div class="conn"></div>
+    <div class="hitem"><div class="hnum">3</div><div><div class="hname">👨‍🏫 Docente Guía</div><div class="hdesc">Escalamos cuando el problema requiere perspectiva docente.</div></div></div>
+    <div class="conn"></div>
+    <div class="hitem"><div class="hnum">4</div><div><div class="hname">🏛️ Comisión de Seguimiento Académico</div><div class="hdesc">El equipo institucional que vela por tu trayectoria a largo plazo.</div></div></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S4 · NO UC ═══ -->
+<div class="slide" id="s4">
+<div class="si">
+  <div class="chip">⚠️ Aclaración importante</div>
+  <h2 class="stitle" style="color:var(--utec-blue)">Esta tutoría <span class="sky">NO</span> es la de UC</h2>
+  <p class="ssub" style="color:var(--utec-muted)">Dos cosas distintas. No las confundas.</p>
+  <div class="cgrid">
+    <div class="ccard no">
+      <div class="clabel">❌ Tutoría de Unidad Curricular</div>
+      <h3>Calificación entre 2,00 y 2,99</h3>
+      <p>Es una instancia <strong>técnica</strong> para recuperar una materia específica. Se activa cuando ya estás en rojo. Allá vas a estudiar conceptos.</p>
+    </div>
+    <div class="ccard yes">
+      <div class="clabel">✅ Esta Tutoría (Programa ENLACE)</div>
+      <h3>Para todos, desde el Día 1</h3>
+      <p>Es un espacio de <strong>acompañamiento preventivo y estratégico</strong>. Aquí venís a diseñar tu estrategia de éxito. <em>No esperés a estar en rojo para venir.</em></p>
+    </div>
+  </div>
+  <div class="alertbar">
+    <span>💡</span>
+    <span>La clave es <strong>no esperar la crisis</strong>. Cuanto antes conectemos, mejor podemos trazar el camino juntos/as.</span>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S5 · ROL ═══ -->
+<div class="slide" id="s5">
+<div class="si">
+  <div class="chip">🎭 Mi rol</div>
+  <h2 class="stitle" style="color:#fff">Lo que <span style="color:#6ee09e">soy</span> y lo que <span style="color:#f08080">no soy</span></h2>
+  <p class="ssub" style="color:rgba(255,255,255,.5)">Con honestidad, para que nadie se lleve sorpresas.</p>
+  <div class="rgrid">
+    <div class="rcard yes">
+      <div class="rtitle">✅ Soy tu/tu</div>
+      <div class="ri"><div class="dot"></div><span><strong>GPS académico</strong>: sé por dónde vienen los baches</span></div>
+      <div class="ri"><div class="dot"></div><span><strong>Oreja disponible</strong>: escucho sin juzgar</span></div>
+      <div class="ri"><div class="dot"></div><span><strong>Puente</strong> hacia recursos y personas clave</span></div>
+      <div class="ri"><div class="dot"></div><span><strong>Compañero/a</strong> de estrategia, no de examen</span></div>
+    </div>
+    <div class="rcard no">
+      <div class="rtitle">❌ No soy</div>
+      <div class="ri"><div class="dot"></div><span><strong>Google:</strong> no lo sé todo… pero sé a quién preguntarle 😄</span></div>
+      <div class="ri"><div class="dot"></div><span><strong>Terapeuta:</strong> te escucho, pero si la cosa se pone profunda, conectamos con apoyo profesional</span></div>
+      <div class="ri"><div class="dot"></div><span><strong>El profe:</strong> no te tomo examen, ¡estoy del mismo lado del escritorio!</span></div>
+      <div class="ri"><div class="dot"></div><span><strong>Secretaria 24/7:</strong> hay horarios y canales acordados</span></div>
+    </div>
+  </div>
+  <div class="conf">
+    <span>🔒</span>
+    <span>Lo que hablemos <strong>queda entre nosotros</strong>. Lo que pasa en la tutoría, se queda en la tutoría. Espacio seguro.</span>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S6 · TOOLBOX ═══ -->
+<div class="slide" id="s6">
+<div class="si">
+  <div class="chip">🧰 Recursos</div>
+  <h2 class="stitle" style="color:var(--utec-blue)">El <span class="sky">Toolbox</span> del Semestre</h2>
+  <p class="ssub" style="color:var(--utec-muted)">Herramientas concretas para que no tengas que descubrir todo de cero.</p>
+  <div class="tgrid">
+    <div class="tcard"><div class="ticon">🌐</div><div class="tname">Exploración Web</div><div class="tdesc">Plataformas UTEC, campus virtual, recursos académicos. Aprendemos a movernos.</div></div>
+    <div class="tcard"><div class="ticon">🧠</div><div class="tname">Técnicas de Estudio</div><div class="tdesc">Pomodoro, mapas conceptuales, Feynman. Para que el cerebro procese sin colapsar.</div></div>
+    <div class="tcard"><div class="ticon">⏱️</div><div class="tname">Gestión del Tiempo</div><div class="tdesc">Cursos UTEC disponibles (¡existen y salvan vidas!). Planificación semana a semana.</div></div>
+    <div class="tcard"><div class="ticon">🗺️</div><div class="tname">Logística UTEC</div><div class="tdesc">Trámites, fechas clave, becas, bajas. Que el sistema no te coma antes de tiempo.</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S7 · CRONOGRAMA + HORARIOS ═══ -->
+<div class="slide" id="s7">
+<div class="si">
+  <div class="chip">📅 Cronograma &amp; Disponibilidad</div>
+  <h2 class="stitle" style="color:#fff">Nuestro <span class="acc">ritmo</span> de encuentros</h2>
+  <div class="sgrid">
+    <div class="sblock hi">
+      <div class="slabel">1.er Semestre</div>
+      <div class="stit2">Cada 15 días</div>
+      <div class="sfreq">🔁 Ritmo de ajuste rápido</div>
+      <div class="snote">Muchas dudas y mucha energía. Presencia frecuente para que nada se acumule.</div>
+    </div>
+    <div class="sblock">
+      <div class="slabel">2.do Semestre</div>
+      <div class="stit2">Cada 21 días</div>
+      <div class="sfreq">🔁 Ritmo de crucero</div>
+      <div class="snote">Más confianza en el camino. Modalidad: virtual o presencial — a convenir entre todos. ☕</div>
+    </div>
+  </div>
+  <div class="avail-title">🕐 Mis horarios reales — para que sepas cuándo estoy</div>
+  <div class="dgrid">
+    <div class="dcard ok"><div class="dname">Lunes</div><div class="dstatus">✅ Disponible<br>hasta 17:30</div></div>
+    <div class="dcard ok"><div class="dname">Martes</div><div class="dstatus">✅ Disponible<br>hasta 17:30</div></div>
+    <div class="dcard busy"><div class="dname">Miércoles</div><div class="dstatus">⚠️ Presencial c/15 días<br>Clases 17:30–22:30</div></div>
+    <div class="dcard busy"><div class="dname">Jueves</div><div class="dstatus">⚠️ Clases<br>17:30–22:30</div></div>
+    <div class="dcard busy"><div class="dname">Viernes</div><div class="dstatus">⚠️ Clases<br>17:30–22:30</div></div>
+  </div>
+  <div class="avnote">
+    💬 Tengo clases de <strong>17:30 a 22:30</strong> de lunes a viernes. Si escribís después de esa hora, te contesto al día siguiente. <strong>¡No es rechazo, es agenda!</strong>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S8 · MANUAL DE SUPERVIVENCIA ═══ -->
+<div class="slide" id="s8">
+<div class="si">
+  <div class="chip">🗺️ Tips de nicho</div>
+  <h2 class="stitle" style="color:var(--utec-blue)">Manual de <span class="sky">Supervivencia</span></h2>
+  <p class="ssub" style="color:var(--utec-muted)">Lo que no está en el sitio oficial. Info de primera mano.</p>
+  <div class="mgrid">
+    <div class="mcard">
+      <div class="micon">📚</div>
+      <div class="mname">Biblio &amp; Espacios</div>
+      <!-- ── EDITAR: completá con el tip real ── -->
+      <div class="mtip">La biblioteca tiene <strong>salas de estudio reservables</strong>. Reservalas con tiempo. El mejor lugar para estudiar tranquilo/a es <strong>[completar]</strong>.</div>
+    </div>
+    <div class="mcard">
+      <div class="micon">🖨️</div>
+      <div class="mname">Fotocopiadora &amp; Impresión</div>
+      <!-- ── EDITAR ── -->
+      <div class="mtip">La más barata / conveniente: <strong>[completar]</strong>. Los laboratorios tienen impresión con límite mensual — <strong>no la desperdicies en borradores</strong>.</div>
+    </div>
+    <div class="mcard">
+      <div class="micon">☕</div>
+      <div class="mname">Cafetería &amp; Comida</div>
+      <!-- ── EDITAR ── -->
+      <div class="mtip">Mejor café / más barato: <strong>[completar]</strong>. Llegar temprano al comedor ahorra plata y tiempo. <strong>Comé bien, el cerebro lo nota</strong>.</div>
+    </div>
+    <div class="mcard">
+      <div class="micon">📅</div>
+      <div class="mname">Bajas &amp; Trámites</div>
+      <div class="mtip">La <strong>baja de UC tiene plazos estrictos</strong>. Si algo no funciona, hablá conmigo <em>antes</em> de que cierre la ventana. El sistema no perdona.</div>
+    </div>
+    <div class="mcard">
+      <div class="micon">💻</div>
+      <div class="mname">Plataformas clave</div>
+      <div class="mtip">Campus UTEC para notas y comunicados. EVA/Moodle para materiales. <strong>Revisalos todos los lunes</strong> — los profes avisan con poco margen.</div>
+    </div>
+    <div class="mcard">
+      <div class="micon">🤝</div>
+      <div class="mname">Grupos de estudio</div>
+      <div class="mtip">Hacé tu grupo <strong>desde la semana 2</strong>, no esperes al parcial. Un grupo de 3-4 personas bien elegidas vale más que 10 horas solo/a.</div>
+    </div>
+  </div>
+  <div class="mfooter">
+    <span>📌</span>
+    <span>Estos tips los voy a ir actualizando. Ustedes también traigan los suyos — <strong>el manual lo construimos entre todos</strong>.</span>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S9 · CALENDARIO / RECURSOS / BECAS ═══ -->
+<div class="slide" id="s9">
+<div class="si">
+  <div class="chip">📆 Fechas &amp; Recursos</div>
+  <h2 class="stitle" style="color:#fff">Lo que <span class="acc">viene</span> — marcalo ya</h2>
+  <p class="ssub" style="color:rgba(255,255,255,.5)">Agenda académica, plataformas útiles y becas disponibles.</p>
+  <div class="calgrid">
+    <div>
+      <div class="chead">⚠️ Próximas fechas críticas</div>
+      <!-- ══ EDITAR: reemplazá con las fechas reales de parciales ══ -->
+      <div class="citem urg">
+        <div class="cdate">PRÓX.<br>SEMANA</div>
+        <div class="cinfo">
+          <strong>Parciales — 1.er período</strong>
+          <span>Confirmá fechas en campus. Hablá con cada docente esta semana.</span>
+        </div>
       </div>
-      <div class="hero-tag">Tutoría Académica 2025</div>
-      <h1>Acompañamiento<br><span>Estratégico</span><br>en Mecatrónica</h1>
-      <p class="tagline">"Porque nadie sobrevive al primer semestre<br>operando en modo manual."</p>
-      <div class="pills">
-        <div class="pill">🎯 Ingeniería en Mecatrónica</div>
-        <div class="pill">📍 1.er Semestre · 2025</div>
-        <div class="pill">🤝 Programa ENLACE</div>
+      <div class="citem">
+        <div class="cdate">Sem. 1</div>
+        <div class="cinfo"><strong>Parcial [Materia A]</strong><span>📍 [Aula] · [Hora]</span></div>
       </div>
+      <div class="citem">
+        <div class="cdate">Sem. 2</div>
+        <div class="cinfo"><strong>Parcial [Materia B]</strong><span>📍 [Aula] · [Hora]</span></div>
+      </div>
+      <div class="citem">
+        <div class="cdate">Sem. 3</div>
+        <div class="cinfo"><strong>Examen / Entrega [C]</strong><span>📍 [Aula] · [Hora]</span></div>
+      </div>
+      <!-- ══ FIN EDITAR ══ -->
+    </div>
+    <div>
+      <div class="chead">🔗 Recursos online</div>
+      <!-- ══ EDITAR: reemplazá los href con los links reales ══ -->
+      <div class="resrow">
+        <a class="rlink" href="https://campus.utec.edu.uy" target="_blank">🎓 Campus UTEC</a>
+        <a class="rlink" href="#" target="_blank">📋 Calendario Académico</a>
+      </div>
+      <div class="resrow">
+        <a class="rlink" href="#" target="_blank">📚 EVA / Moodle</a>
+        <a class="rlink" href="#" target="_blank">⏱️ Curso Gestión del Tiempo</a>
+      </div>
+      <div class="resrow">
+        <a class="rlink" href="#" target="_blank">🗓️ Fechas de bajas UC</a>
+        <a class="rlink" href="#" target="_blank">📖 Reglamento estudiantil</a>
+      </div>
+      <!-- ══ FIN EDITAR ══ -->
+      <div class="chead" style="margin-top:14px">💰 Becas y apoyos</div>
+      <div class="citem">
+        <div class="cinfo">
+          <strong>Becas UTEC</strong>
+          <span>Comedor, transporte, materiales. Si tenés dificultades económicas, consultame — hay opciones.</span>
+        </div>
+      </div>
+      <div class="citem">
+        <div class="cinfo">
+          <strong>MIDES / BPS / Externos</strong>
+          <span>El equipo de bienestar estudiantil orienta en cada caso.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="becabar">
+    <span>🌟</span>
+    <span>No esperés a "merecerlo" para pedir una beca. <strong>Si necesitás apoyo, preguntá ya</strong>. Los plazos se cierran y después no hay vuelta atrás.</span>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S10 · SISTEMA MECATRÓNICO ═══ -->
+<div class="slide" id="s10">
+<div class="si">
+  <div class="chip">⚙️ Analogía</div>
+  <h2 class="stitle" style="color:var(--utec-blue)">El <span class="sky">Sistema de Control</span> del Estudiante</h2>
+  <p class="ssub" style="color:var(--utec-muted)">Traducido al lenguaje que mejor entendés.</p>
+  <div class="sflow">
+    <div class="syb w">
+      <div class="sico">📡</div>
+      <div class="snm" style="color:var(--utec-sky)">Sensor</div>
+      <div class="slab" style="color:var(--utec-text)">Detección</div>
+      <div class="sdesc" style="color:var(--utec-muted)">Identificás qué te está costando o qué no entendés</div>
+    </div>
+    <div class="sarr"><div class="aline"></div><div class="ahead">▶</div></div>
+    <div class="syb bl">
+      <div class="sico">🧠</div>
+      <div class="snm">Controlador</div>
+      <div class="slab">Tutoría</div>
+      <div class="sdesc">Analizamos la situación y planeamos la estrategia de corrección</div>
+    </div>
+    <div class="sarr"><div class="aline"></div><div class="ahead">▶</div></div>
+    <div class="syb bl">
+      <div class="sico">⚡</div>
+      <div class="snm" style="color:var(--utec-accent)">Actuador</div>
+      <div class="slab">Acción</div>
+      <div class="sdesc">Vos aplicás las técnicas, hacés el trámite o buscás la asesoría</div>
+    </div>
+    <div class="sarr"><div class="aline"></div><div class="ahead">▶</div></div>
+    <div class="syb w">
+      <div class="sico">📊</div>
+      <div class="snm" style="color:var(--utec-green)">Salida</div>
+      <div class="slab" style="color:var(--utec-text)">Resultado</div>
+      <div class="sdesc" style="color:var(--utec-muted)">Mejora académica, menos estrés, más claridad</div>
+    </div>
+  </div>
+  <div class="fbloop">
+    <span>🔄</span>
+    <span>El lazo de retroalimentación siempre está activo: <strong>cada encuentro es una nueva iteración</strong>. El objetivo es que el error tienda a cero, no que nunca exista.</span>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S11 · EMPATÍA ═══ -->
+<div class="slide" id="s11">
+<div class="si">
+  <div class="chip">💙 Empatía</div>
+  <h2 class="stitle" style="color:#fff">Yo también <span class="acc">estuve ahí</span></h2>
+  <p class="ssub" style="color:rgba(255,255,255,.5)">Lo que nadie te dice en la bienvenida oficial.</p>
+  <div class="egrid">
+    <div class="ecard">
+      <div class="eico">😰</div><div class="etit">El primer parcial</div>
+      <p>Estudiaste, creíste que estaba bien, y no salió como esperabas. Es <strong>parte del proceso</strong>, no el final del camino.</p>
+    </div>
+    <div class="ecard">
+      <div class="eico">⏰</div><div class="etit">El tiempo que se evapora</div>
+      <p>De pronto son las 2am y mañana tenés entrega. <strong>Aprender a organizarse</strong> es la materia más difícil del semestre.</p>
+    </div>
+    <div class="ecard">
+      <div class="eico">🧭</div><div class="etit">No saber pedir ayuda</div>
+      <p>Preguntar no es debilidad. Las personas que más lejos llegan son las que <strong>aprendieron a preguntar</strong> a tiempo.</p>
+    </div>
+  </div>
+  <div class="sharenote">
+    <span>📋</span>
+    <span>Voy a compartirles mis rutinas reales: cómo organizo mi tiempo, qué técnicas uso, qué errores cometí. No como receta mágica, sino para que vean que <em>se puede, y no hay una sola forma.</em></span>
+  </div>
+</div>
+</div>
+
+<!-- ═══ S12 · CIERRE ═══ -->
+<div class="slide" id="s12">
+<div class="si">
+  <div class="bggear">⚙️</div>
+
+  <!-- Logos en el cierre -->
+  <div class="logo-row">
+    <div class="logo-img">
+      <img src="utec-logo.png" alt="UTEC"
+           onerror="this.parentElement.style.display='none';document.getElementById('lfc1').style.display='flex'">
+    </div>
+    <div class="logo-fb" id="lfc1">
+      <div class="lb" style="background:var(--utec-accent);width:34px;height:34px;font-size:13px">U</div>
+      <div class="lt">UTEC</div>
+    </div>
+    <div class="logo-div"></div>
+    <div class="logo-img">
+      <img src="mecatronica-logo.png" alt="Mecatrónica"
+           onerror="this.parentElement.style.display='none';document.getElementById('lfc2').style.display='flex'">
+    </div>
+    <div class="logo-fb" id="lfc2">
+      <div class="lb" style="background:var(--utec-sky);width:34px;height:34px;font-size:13px">⚙</div>
+      <div class="lt">Mecatrónica</div>
     </div>
   </div>
 
-  <!-- ═══ SLIDE 2: ¿QUÉ ES LA TUTORÍA? ═══ -->
-  <div class="slide" id="s2">
-    <div class="slide-inner">
-      <div class="chip">📖 Definición</div>
-      <h2 class="slide-title">¿Qué es la <span style="color:var(--utec-sky)">Tutoría Académica</span>?</h2>
-      <p class="slide-sub" style="color:var(--utec-muted)">No es una clase extra. Es algo mucho más valioso.</p>
-      <div class="definition-card">
-        <p>Es un proceso de <strong>acompañamiento personalizado</strong> que busca potenciar tus habilidades, anticipar obstáculos y orientarte a lo largo de tu trayectoria universitaria.<br><br>
-        Orientamos, acompañamos, <strong>escuchamos</strong> y empativamos. Somos guía académica y logística.</p>
-      </div>
-      <div class="analogy-box">
-        <div class="label">🔧 Analogía mecatrónica</div>
-        <p>Así como un <strong>sistema de control de lazo cerrado</strong> ajusta su salida con base en la retroalimentación, la tutoría es el <em>feedback</em> que te ayuda a <strong>recalibrar tu camino académico</strong> antes de que la señal de error sea demasiado grande.</p>
-      </div>
-      <div class="keywords">
-        <div class="kw">Orientar</div>
-        <div class="kw">Acompañar</div>
-        <div class="kw">Escuchar</div>
-        <div class="kw">Empatizar</div>
-        <div class="kw">Guía Académica</div>
-        <div class="kw">Guía Logística</div>
-      </div>
+  <div class="chip">🚀 ¡Arrancamos!</div>
+  <div class="closingq">¿Cuál es el <span>trámite o la materia</span> que más sueño les está quitando hoy?</div>
+  <p class="closingsub">Este es nuestro primer encuentro. El espacio es de ustedes. Pregunten, duden, cuenten. Acá no hay preguntas tontas.</p>
+
+  <!-- ══ GOOGLE FORM — reemplazá el href con tu link real ══ -->
+  <a class="formbtn" href="https://forms.gle/REEMPLAZAR_CON_TU_LINK" target="_blank">
+    📋 Dejar una duda o consulta anónima
+  </a>
+  <p class="formnote">Link a Google Form. Podés dejar preguntas de forma anónima — las revisamos en el próximo encuentro.</p>
+  <!-- ══ FIN GOOGLE FORM ══ -->
+
+  <div class="crow">
+    <div class="citem">
+      <span class="ico">📱</span>
+      <div><span class="lbl">Canal principal</span>A definir · WhatsApp / Discord</div>
+    </div>
+    <div class="citem">
+      <span class="ico">📩</span>
+      <div><span class="lbl">Correo institucional</span>[tu-correo@utec.edu.uy]</div>
+    </div>
+    <div class="citem">
+      <span class="ico">🕐</span>
+      <div><span class="lbl">Mejor horario para escribirme</span>Lun–Vie · antes de 17:30</div>
     </div>
   </div>
 
-  <!-- ═══ SLIDE 3: JERARQUÍA ═══ -->
-  <div class="slide" id="s3">
-    <div class="slide-inner">
-      <div class="chip">🗂️ Estructura</div>
-      <h2 class="slide-title">Tu red de <span style="color:var(--utec-accent)">soporte</span></h2>
-      <p class="slide-sub">Nunca estás solo/a. Hay toda una estructura detrás tuyo.</p>
-      <div class="hierarchy">
-        <div class="h-item highlight">
-          <div class="h-num">1</div>
-          <div style="flex:1">
-            <div class="h-name">👤 Estudiante</div>
-            <div class="h-desc">El centro del sistema. El protagonista.</div>
-          </div>
-          <div class="h-badge">Tú</div>
-        </div>
-        <div class="connector"></div>
-        <div class="h-item highlight">
-          <div class="h-num">2</div>
-          <div style="flex:1">
-            <div class="h-name">🙋 Tutor/a</div>
-            <div class="h-desc">Tu primer punto de contacto y aliado/a. Primer filtro de consultas y apoyo.</div>
-          </div>
-          <div class="h-badge">Yo</div>
-        </div>
-        <div class="connector"></div>
-        <div class="h-item">
-          <div class="h-num">3</div>
-          <div>
-            <div class="h-name">👨‍🏫 Docente Guía</div>
-            <div class="h-desc">Escalamos cuando el problema requiere perspectiva docente.</div>
-          </div>
-        </div>
-        <div class="connector"></div>
-        <div class="h-item">
-          <div class="h-num">4</div>
-          <div>
-            <div class="h-name">🏛️ Comisión de Seguimiento Académico</div>
-            <div class="h-desc">El equipo institucional que vela por tu trayectoria a largo plazo.</div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="footer">
+    <div class="fb">U</div>
+    <div class="ft">UTEC · Programa ENLACE · 2025</div>
   </div>
-
-  <!-- ═══ SLIDE 4: NO ES TUTORÍA DE UC ═══ -->
-  <div class="slide" id="s4">
-    <div class="slide-inner">
-      <div class="chip">⚠️ Aclaración importante</div>
-      <h2 class="slide-title">Esta tutoría <span style="color:var(--utec-sky)">NO</span> es la de UC</h2>
-      <p class="slide-sub" style="color:var(--utec-muted)">Dos cosas distintas. No las confundas.</p>
-      <div class="compare-grid">
-        <div class="compare-card no">
-          <div class="c-label">❌ Tutoría de Unidad Curricular</div>
-          <h3>Calificación entre 2,00 y 2,99</h3>
-          <p>Es una instancia <strong>técnica</strong> para recuperar una materia específica. Se activa cuando ya estás en rojo. Allá vas a estudiar conceptos.</p>
-        </div>
-        <div class="compare-card yes">
-          <div class="c-label">✅ Esta Tutoría (Programa ENLACE)</div>
-          <h3>Para todos, desde el Día 1</h3>
-          <p>Es un espacio de <strong>acompañamiento preventivo y estratégico</strong>. Aquí venís a diseñar tu estrategia de éxito. <em>No esperés a estar en rojo para venir.</em></p>
-        </div>
-      </div>
-      <div class="alert-bar">
-        <span class="icon">💡</span>
-        <span>La clave es <strong>no esperar la crisis</strong>. Cuanto antes conectemos, mejor podemos trazar el camino juntos/as.</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SLIDE 5: ROL DEL TUTOR ═══ -->
-  <div class="slide" id="s5">
-    <div class="slide-inner">
-      <div class="chip" style="background:rgba(232,160,32,.18);color:var(--utec-accent)">🎭 Mi rol</div>
-      <h2 class="slide-title">Lo que <span style="color:#6ee09e">soy</span> y lo que <span style="color:#f08080">no soy</span></h2>
-      <p class="slide-sub">Con honestidad, para que nadie se lleve sorpresas.</p>
-      <div class="role-grid">
-        <div class="role-card yes-card">
-          <div class="rc-title">✅ Soy tu/tu</div>
-          <div class="role-item"><div class="dot"></div><span><strong>GPS académico</strong>: sé por dónde vienen los baches</span></div>
-          <div class="role-item"><div class="dot"></div><span><strong>Oreja disponible</strong>: escucho sin juzgar</span></div>
-          <div class="role-item"><div class="dot"></div><span><strong>Puente</strong> hacia recursos y personas clave</span></div>
-          <div class="role-item"><div class="dot"></div><span><strong>Compañero/a</strong> de estrategia, no de examen</span></div>
-        </div>
-        <div class="role-card no-card">
-          <div class="rc-title">❌ No soy</div>
-          <div class="role-item"><div class="dot"></div><span><strong>Google:</strong> no lo sé todo… pero sé a quién preguntarle 😄</span></div>
-          <div class="role-item"><div class="dot"></div><span><strong>Terapeuta:</strong> te escucho, pero si la cosa se pone profunda, conectamos con apoyo profesional</span></div>
-          <div class="role-item"><div class="dot"></div><span><strong>El profe:</strong> no te tomo examen, ¡estoy del mismo lado del escritorio!</span></div>
-          <div class="role-item"><div class="dot"></div><span><strong>Secretaria 24/7:</strong> hay horarios y canales acordados</span></div>
-        </div>
-      </div>
-      <div class="confidentiality">
-        <span class="icon">🔒</span>
-        <span>Lo que hablemos <strong>queda entre nosotros</strong>. Es un espacio de confianza y escucha. Lo que pasa en la tutoría, se queda en la tutoría.</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SLIDE 6: TOOLBOX ═══ -->
-  <div class="slide" id="s6">
-    <div class="slide-inner">
-      <div class="chip">🧰 Recursos</div>
-      <h2 class="slide-title">El <span style="color:var(--utec-sky)">Toolbox</span> del Semestre</h2>
-      <p class="slide-sub" style="color:var(--utec-muted)">Herramientas concretas para que no tengas que descubrir todo de cero.</p>
-      <div class="tools-grid">
-        <div class="tool-card">
-          <div class="tool-icon">🌐</div>
-          <div class="tool-name">Exploración Web</div>
-          <div class="tool-desc">Plataformas UTEC, campus virtual, recursos académicos. Aprendemos a movernos.</div>
-        </div>
-        <div class="tool-card">
-          <div class="tool-icon">🧠</div>
-          <div class="tool-name">Técnicas de Estudio</div>
-          <div class="tool-desc">Pomodoro, mapas conceptuales, Feynman. Para que el cerebro procese sin colapsar.</div>
-        </div>
-        <div class="tool-card">
-          <div class="tool-icon">⏱️</div>
-          <div class="tool-name">Gestión del Tiempo</div>
-          <div class="tool-desc">Cursos UTEC disponibles (¡existen y salvan vidas!). Planificación semana a semana.</div>
-        </div>
-        <div class="tool-card">
-          <div class="tool-icon">🗺️</div>
-          <div class="tool-name">Logística UTEC</div>
-          <div class="tool-desc">Trámites, fechas clave, becas, bajas. Que el sistema no te coma antes de tiempo.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SLIDE 7: CRONOGRAMA ═══ -->
-  <div class="slide" id="s7">
-    <div class="slide-inner">
-      <div class="chip">📅 Cronograma</div>
-      <h2 class="slide-title">Nuestro <span style="color:var(--utec-accent)">ritmo</span> de encuentros</h2>
-      <p class="slide-sub">Presencia constante sin sobrecargarte. Lo acordamos juntos/as.</p>
-      <div class="timeline">
-        <div class="tl-item">
-          <div class="tl-left">
-            <div class="tl-dot">1S</div>
-            <div class="tl-line"></div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-semester">1.er Semestre</div>
-            <div class="tl-freq">🔁 Cada 15 días</div>
-            <div class="tl-note">Ritmo de ajuste rápido. Estamos en modo de arranque: hay muchas dudas, mucha energía y también mucha ansiedad. Presencia frecuente para que no se acumule nada.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-left">
-            <div class="tl-dot">2S</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-semester">2.do Semestre</div>
-            <div class="tl-freq">🔁 Cada 21 días</div>
-            <div class="tl-note">Ritmo de crucero. Ya conocemos el sistema, encontramos el equilibrio. Seguimos juntos, pero con más confianza en el camino.</div>
-          </div>
-        </div>
-      </div>
-      <div class="modality-bar">
-        <span class="icon">💬</span>
-        <span><strong>Modalidad:</strong> la decidimos entre todos. ¿Virtual para no moverse de casa o presencial con un café de por medio? El formato es tuyo. 🤝</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SLIDE 8: SISTEMA MECATRÓNICO ═══ -->
-  <div class="slide" id="s8">
-    <div class="slide-inner">
-      <div class="chip">⚙️ Analogía</div>
-      <h2 class="slide-title">El <span style="color:var(--utec-sky)">Sistema de Control</span> del Estudiante</h2>
-      <p class="slide-sub" style="color:var(--utec-muted)">Traducido al lenguaje que mejor entendés.</p>
-      <div class="system-flow">
-        <div class="sys-block">
-          <div class="sys-icon">📡</div>
-          <div class="sys-name" style="color:var(--utec-sky)">Sensor</div>
-          <div class="sys-label" style="color:var(--utec-text)">Detección</div>
-          <div class="sys-desc" style="color:var(--utec-muted)">Identificás qué te está costando trabajo o qué no terminás de entender</div>
-        </div>
-        <div class="sys-arrow"><div class="arrow-line"></div><div class="arrow-head">▶</div></div>
-        <div class="sys-block">
-          <div class="sys-icon">🧠</div>
-          <div class="sys-name">Controlador</div>
-          <div class="sys-label">Tutoría</div>
-          <div class="sys-desc">Analizamos juntos la situación y planeamos una estrategia de corrección</div>
-        </div>
-        <div class="sys-arrow"><div class="arrow-line"></div><div class="arrow-head">▶</div></div>
-        <div class="sys-block">
-          <div class="sys-icon">⚡</div>
-          <div class="sys-name">Actuador</div>
-          <div class="sys-label">Acción</div>
-          <div class="sys-desc">Vos aplicás las técnicas, hacés el trámite o buscás la asesoría necesaria</div>
-        </div>
-        <div class="sys-arrow"><div class="arrow-line"></div><div class="arrow-head">▶</div></div>
-        <div class="sys-block">
-          <div class="sys-icon">📊</div>
-          <div class="sys-name" style="color:#6ee09e">Salida</div>
-          <div class="sys-label" style="color:var(--utec-text)">Resultado</div>
-          <div class="sys-desc" style="color:var(--utec-muted)">Mejora académica, menos estrés, más claridad en el camino</div>
-        </div>
-      </div>
-      <div class="feedback-loop">
-        <span class="icon">🔄</span>
-        <span>El lazo de retroalimentación siempre está activo: <strong>cada encuentro es una nueva iteración</strong>. El objetivo es que el error tienda a cero, no que nunca exista.</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SLIDE 9: YO TAMBIÉN ESTUVE AHÍ ═══ -->
-  <div class="slide" id="s9">
-    <div class="slide-inner">
-      <div class="chip">💙 Empatía</div>
-      <h2 class="slide-title">Yo también <span style="color:var(--utec-accent)">estuve ahí</span></h2>
-      <p class="slide-sub">Lo que nadie te dice en la bienvenida oficial.</p>
-      <div class="empathy-grid">
-        <div class="em-card">
-          <div class="em-icon">😰</div>
-          <div class="em-title">El primer parcial</div>
-          <p>Estudiaste, creíste que estaba bien, y no salió como esperabas. Es <strong>parte del proceso</strong>, no el final del camino.</p>
-        </div>
-        <div class="em-card">
-          <div class="em-icon">⏰</div>
-          <div class="em-title">El tiempo que se evapora</div>
-          <p>De pronto son las 2am y mañana tenés entrega. <strong>Aprender a organizarse</strong> es la materia más difícil del semestre.</p>
-        </div>
-        <div class="em-card">
-          <div class="em-icon">🧭</div>
-          <div class="em-title">No saber pedir ayuda</div>
-          <p>Preguntar no es debilidad. Las personas que más lejos llegan son las que <strong>aprendieron a preguntar</strong> a tiempo.</p>
-        </div>
-      </div>
-      <div class="share-note">
-        <span class="icon">📋</span>
-        <span>Voy a compartirles mis rutinas reales: cómo organizo mi tiempo, qué técnicas uso, qué errores cometí. No como receta mágica, sino para que vean que <em>se puede, y no hay una sola forma de hacerlo.</em></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SLIDE 10: CIERRE ═══ -->
-  <div class="slide" id="s10">
-    <div class="slide-inner">
-      <div class="bg-gear">⚙️</div>
-      <div class="chip">🚀 ¡Arrancamos!</div>
-      <div class="closing-q">¿Cuál es el <span>trámite o la materia</span> que más sueño les está quitando hoy?</div>
-      <p class="closing-sub">Este es nuestro primer encuentro. El espacio es de ustedes. Pregunten, duden, cuenten. Acá no hay preguntas tontas.</p>
-      <div class="contact-row">
-        <div class="contact-item">
-          <span class="icon">📱</span>
-          <div>
-            <span class="label">Canal principal</span>
-            A definir entre todos · WhatsApp / Discord
-          </div>
-        </div>
-        <div class="contact-item">
-          <span class="icon">📩</span>
-          <div>
-            <span class="label">Correo institucional</span>
-            [Tu correo @utec.edu.uy]
-          </div>
-        </div>
-        <div class="contact-item">
-          <span class="icon">🕐</span>
-          <div>
-            <span class="label">Horario de atención</span>
-            [A definir con el grupo]
-          </div>
-        </div>
-      </div>
-      <div class="utec-footer">
-        <div class="f-box">U</div>
-        <div class="f-text">UTEC · Programa ENLACE · 2025</div>
-      </div>
-    </div>
-  </div>
+</div>
+</div>
 
 </div><!-- /stage -->
 
-<!-- Navigation -->
+<!-- Nav -->
 <nav class="nav">
-  <button id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+  <button onclick="changeSlide(-1)">← Anterior</button>
   <div class="nav-dots" id="navDots"></div>
-  <div class="slide-counter" id="counter">1 / 10</div>
-  <button id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+  <div class="slide-counter" id="counter">1 / 12</div>
+  <button onclick="changeSlide(1)">Siguiente →</button>
 </nav>
 
 <script>
   const slides = document.querySelectorAll('.slide');
-  const total = slides.length;
-  let current = 0;
-  let prev = -1;
+  const total  = slides.length;
+  let current  = 0, prevIdx = -1;
+  const dotsEl = document.getElementById('navDots');
+  const ctrEl  = document.getElementById('counter');
 
-  const dotsContainer = document.getElementById('navDots');
-  const counter = document.getElementById('counter');
-
-  // Build dots
-  slides.forEach((_, i) => {
+  slides.forEach((_,i) => {
     const d = document.createElement('div');
-    d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    d.className = 'nav-dot' + (i===0 ? ' active' : '');
     d.onclick = () => goTo(i);
-    dotsContainer.appendChild(d);
+    dotsEl.appendChild(d);
   });
 
   function goTo(n) {
     if (n === current) return;
     slides[current].classList.remove('active');
     slides[current].classList.add('prev');
-    setTimeout(() => slides[prev >= 0 ? prev : current].classList.remove('prev'), 500);
-    prev = current;
+    const old = prevIdx;
+    prevIdx = current;
     current = n;
     slides[current].classList.add('active');
-    // Update dots
-    document.querySelectorAll('.nav-dot').forEach((d, i) => {
-      d.classList.toggle('active', i === current);
-    });
-    counter.textContent = `${current + 1} / ${total}`;
+    setTimeout(() => { if (old >= 0) slides[old].classList.remove('prev'); }, 500);
+    document.querySelectorAll('.nav-dot').forEach((d,i) => d.classList.toggle('active', i===current));
+    ctrEl.textContent = `${current+1} / ${total}`;
   }
+  function changeSlide(d) { goTo((current + d + total) % total); }
 
-  function changeSlide(dir) {
-    const next = (current + dir + total) % total;
-    goTo(next);
-  }
-
-  // Keyboard
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
-    if (e.key === 'ArrowLeft') changeSlide(-1);
+    if (e.key==='ArrowRight' || e.key===' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key==='ArrowLeft') changeSlide(-1);
   });
-
-  // Click on stage (not on nav)
   document.getElementById('stage').addEventListener('click', e => {
-    if (!e.target.closest('.nav')) changeSlide(1);
+    if (!e.target.closest('.nav') && !e.target.closest('a') && !e.target.closest('button'))
+      changeSlide(1);
   });
 </script>
 </body>
