@@ -160,6 +160,88 @@
   }
 
   /* ════════════════════════════════════
+     SLIDE 1B — QUIÉN SOY YO (tutora)
+  ════════════════════════════════════ */
+  #s1b { background: linear-gradient(145deg,#f5f7fa 0%,#e8eef5 100%); }
+  #s1b .si { justify-content: flex-start; }
+  #s1b .top-accent {
+    position:absolute; top:0; left:0; right:0; height:5px;
+    background: linear-gradient(90deg,var(--utec-blue),var(--utec-sky),var(--utec-accent));
+  }
+  #s1b .profile-layout {
+    display:grid; grid-template-columns:220px 1fr; gap:36px;
+    align-items:start; max-width:920px; margin-top:4px;
+  }
+  #s1b .avatar-col { display:flex; flex-direction:column; align-items:center; gap:14px; }
+  #s1b .avatar-ring {
+    width:148px; height:148px; border-radius:50%;
+    background: linear-gradient(135deg,var(--utec-blue),var(--utec-sky));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 10px 40px rgba(0,59,113,.22);
+    position:relative; flex-shrink:0;
+  }
+  #s1b .avatar-ring .initials {
+    font-family:'Outfit',sans-serif; font-size:48px; font-weight:800; color:#fff; letter-spacing:-1px;
+  }
+  #s1b .avatar-ring .badge {
+    position:absolute; bottom:4px; right:4px;
+    background:var(--utec-accent); border-radius:50%; width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center; font-size:16px;
+    border:3px solid #f5f7fa;
+  }
+  #s1b .name-block { text-align:center; }
+  #s1b .name-block .fullname {
+    font-family:'Outfit',sans-serif; font-size:18px; font-weight:800;
+    color:var(--utec-blue); line-height:1.2; margin-bottom:3px;
+  }
+  #s1b .name-block .role-tag {
+    display:inline-block;
+    background:var(--utec-blue); color:#fff;
+    border-radius:30px; padding:4px 13px;
+    font-family:'Outfit',sans-serif; font-size:10.5px; font-weight:700;
+    letter-spacing:.07em; text-transform:uppercase;
+  }
+  #s1b .info-col { display:flex; flex-direction:column; gap:13px; }
+  #s1b .info-section-title {
+    font-family:'Outfit',sans-serif; font-size:10px; font-weight:700;
+    letter-spacing:.13em; text-transform:uppercase; color:var(--utec-accent);
+    margin-bottom:7px; display:flex; align-items:center; gap:7px;
+  }
+  #s1b .info-section-title::after {
+    content:''; flex:1; height:1px; background:rgba(0,59,113,.12);
+  }
+  #s1b .pcard {
+    background:#fff; border-radius:var(--radius);
+    box-shadow: var(--shadow-sm); padding:16px 20px;
+  }
+  #s1b .facts { display:flex; flex-direction:column; gap:6px; }
+  #s1b .fact {
+    display:flex; align-items:flex-start; gap:10px;
+    font-size:13px; color:var(--utec-text); line-height:1.5;
+  }
+  #s1b .fact .ficon {
+    width:26px; height:26px; border-radius:7px;
+    background:rgba(0,59,113,.08); display:flex; align-items:center;
+    justify-content:center; font-size:13px; flex-shrink:0; margin-top:0px;
+  }
+  #s1b .fact strong { color:var(--utec-blue); }
+  #s1b .skills-row { display:flex; flex-wrap:wrap; gap:7px; }
+  #s1b .skill-pill {
+    background:rgba(0,59,113,.07); border:1px solid rgba(0,59,113,.14);
+    color:var(--utec-blue); border-radius:20px; padding:4px 13px;
+    font-family:'Outfit',sans-serif; font-size:11.5px; font-weight:600;
+  }
+  #s1b .frase-cierre {
+    margin-top:6px; background:var(--utec-blue); border-radius:var(--radius);
+    padding:12px 18px; color:rgba(255,255,255,.88); font-size:13px;
+    line-height:1.65; display:flex; align-items:flex-start; gap:10px; max-width:920px;
+  }
+  #s1b .frase-cierre .qmark {
+    font-size:32px; font-family:Georgia,serif; color:var(--utec-accent);
+    line-height:1; flex-shrink:0; margin-top:-4px;
+  }
+
+  /* ════════════════════════════════════
      SLIDE 2 — ¿QUÉ ES?
   ════════════════════════════════════ */
   #s2 { background: #f5f7fa; }
@@ -567,6 +649,94 @@
 </div>
 </div>
 
+<!-- ═══ S1B · QUIÉN SOY ═══ -->
+<div class="slide" id="s1b">
+<div class="si">
+  <div class="top-accent"></div>
+
+  <!-- Header -->
+  <div class="chip">👋 Presentación</div>
+  <h2 class="stitle" style="color:var(--utec-blue)">¿Quién es tu <span class="sky">tutora</span>?</h2>
+  <p class="ssub" style="color:var(--utec-muted)">Antes de arrancar, que sepan con quién están hablando.</p>
+
+  <div class="profile-layout">
+    <!-- Columna avatar -->
+    <div class="avatar-col">
+      <div class="avatar-ring">
+        <div class="initials">SM</div>
+        <div class="badge">🎓</div>
+      </div>
+      <div class="name-block">
+        <div class="fullname">Sofía Modernell</div>
+        <div class="role-tag">Tutora ENLACE</div>
+      </div>
+    </div>
+
+    <!-- Columna info -->
+    <div class="info-col">
+
+      <!-- Sobre mí -->
+      <div class="pcard">
+        <div class="info-section-title">🙋 Sobre mí</div>
+        <div class="facts">
+          <div class="fact">
+            <div class="ficon">🎂</div>
+            <span>Tengo <strong>23 años</strong>, soy de Young</span>
+          </div>
+          <div class="fact">
+            <div class="ficon">🏠</div>
+            <span>Vivo en <strong>Fray Bentos</strong>, así que entiendo perfectamente lo que es mudarte por estudio.</span>
+          </div>
+          <div class="fact">
+            <div class="ficon">☕</div>
+            <span>Fan de la UTEC y las pausas activas. Geminiana</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Como estudiante -->
+      <div class="pcard">
+        <div class="info-section-title">📚 Como estudiante</div>
+        <div class="facts">
+          <div class="fact">
+            <div class="ficon">⚙️</div>
+            <span>Cursando <strong>Ingeniería en Mecatrónica en UTEC</strong> — 5to semestre</span>
+          </div>
+          <div class="fact">
+            <div class="ficon">📖</div>
+            <span>Pasé exactamente por lo que ustedes están empezando: el primer parcial, las noches largas, la desorientación</span>
+          </div>
+          <div class="fact">
+            <div class="ficon">📈</div>
+            <span>Aprendí que <strong>organizarse y pedir ayuda a tiempo</strong> marca la diferencia.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Áreas en que puedo ayudar -->
+      <div class="pcard">
+        <div class="info-section-title">🛠️ En qué puedo ayudarte</div>
+        <div class="skills-row">
+          <span class="skill-pill">Organización del tiempo</span>
+          <span class="skill-pill">Técnicas de estudio</span>
+          <span class="skill-pill">Trámites UTEC</span>
+          <span class="skill-pill">Orientación académica</span>
+          <span class="skill-pill">Escucharte</span>
+          <span class="skill-pill">Derivación a recursos</span>
+        </div>
+      </div>
+
+    </div><!-- /info-col -->
+  </div>
+
+  <div class="frase-cierre">
+    <span class="qmark">"</span>
+    <span>No soy profesora ni experta en todo — soy alguien que ya recorrió este camino y está acá para que <strong>no tengan que hacerlo solos/as</strong>.</span>
+  </div>
+
+</div>
+</div>
+
 <!-- ═══ S2 · ¿QUÉ ES? ═══ -->
 <div class="slide" id="s2">
 <div class="si">
@@ -959,7 +1129,7 @@
 <nav class="nav">
   <button onclick="changeSlide(-1)">← Anterior</button>
   <div class="nav-dots" id="navDots"></div>
-  <div class="slide-counter" id="counter">1 / 12</div>
+  <div class="slide-counter" id="counter">1 / 13</div>
   <button onclick="changeSlide(1)">Siguiente →</button>
 </nav>
 
